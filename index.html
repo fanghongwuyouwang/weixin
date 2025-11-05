@@ -149,21 +149,6 @@
             margin-top: 20px;
             line-height: 1.4;
         }
-        .manual-open-btn {
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s;
-        }
-        .manual-open-btn:hover {
-            background: #667eea;
-            color: white;
-        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -211,12 +196,12 @@
         <div class="guide-card">
             <div class="guide-icon">🔗</div>
             <h1 class="guide-title">请在浏览器中打开</h1>
-            <p class="guide-subtitle">微信内无法直接打开此链接，请按以下步骤操作</p>
+            <p class="guide-subtitle">当前应用无法直接打开此链接</p>
             
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <div>点击右上角 <strong>•••</strong> 按钮</div>
+                    <div>点击右上角菜单按钮</div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
@@ -242,12 +227,8 @@
                 <i class="fa fa-copy"></i> 复制链接
             </button>
             
-            <button class="manual-open-btn" onclick="tryOpenInBrowser()">
-                <i class="fa fa-external-link"></i> 尝试在浏览器打开
-            </button>
-            
             <div class="tip">
-                复制链接后，可粘贴到手机浏览器中访问
+                复制链接后，粘贴到手机浏览器中访问
             </div>
         </div>
     </div>
@@ -272,12 +253,6 @@
             cover_image: '',
             method: 'embed'
         };
-        
-        // 检测是否为微信浏览器
-        function isWeChatBrowser() {
-            const ua = navigator.userAgent.toLowerCase();
-            return ua.indexOf('micromessenger') !== -1;
-        }
         
         // 检测是否为独立浏览器环境（非内嵌环境）
         function isStandaloneBrowser() {
@@ -421,7 +396,7 @@
             }
         }
         
-        // 6. 处理引导模式 - 修复版
+        // 6. 处理引导模式 - 简化版
         function handleRedirectMode(url) {
             // 如果是独立浏览器环境，直接跳转
             if (isStandaloneBrowser()) {
@@ -429,7 +404,7 @@
                 return true;
             }
             
-            // 如果是微信等内嵌浏览器，显示引导页面
+            // 更新引导页面的链接显示
             document.getElementById('copyText').textContent = url;
             
             // 显示引导页面，隐藏加载状态
@@ -464,19 +439,7 @@
             }, 2000);
         }
         
-        // 8. 尝试在浏览器打开
-        function tryOpenInBrowser() {
-            // 尝试唤醒外部浏览器
-            const url = document.getElementById('copyText').textContent;
-            window.location.href = 'weixin://';
-            
-            setTimeout(() => {
-                // 如果还在微信内，提示用户手动操作
-                alert('请点击右上角"•••"按钮，然后选择"在浏览器打开"');
-            }, 1000);
-        }
-        
-        // 9. 主逻辑：根据API返回的模式处理
+        // 8. 主逻辑：根据API返回的模式处理
         async function processContent() {
             const { url, method } = currentContent;
             
@@ -513,7 +476,7 @@
             });
         });
         
-        // 10. 加载内容主函数
+        // 9. 加载内容主函数
         async function loadContent() {
             // 初始化DOM元素
             const loader = document.getElementById('loaderContainer');
