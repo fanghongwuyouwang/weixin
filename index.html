@@ -423,7 +423,13 @@
         
         // 6. 处理引导模式 - 修复版
         function handleRedirectMode(url) {
-            // 更新引导页面的链接显示
+            // 如果是独立浏览器环境，直接跳转
+            if (isStandaloneBrowser()) {
+                window.location.href = url;
+                return true;
+            }
+            
+            // 如果是微信等内嵌浏览器，显示引导页面
             document.getElementById('copyText').textContent = url;
             
             // 显示引导页面，隐藏加载状态
@@ -433,7 +439,7 @@
             loaderContainer.classList.add('hidden');
             guideContainer.classList.remove('hidden');
             
-            // 引导模式永远不自动跳转，固定显示引导页面
+            // 引导模式在内嵌浏览器中不自动跳转，固定显示引导页面
             return false;
         }
         
@@ -475,7 +481,7 @@
             const { url, method } = currentContent;
             
             if (method === 'redirect') {
-                // 引导模式：永远显示引导页面，不跳转
+                // 引导模式
                 return handleRedirectMode(url);
             } else {
                 // 内嵌模式
