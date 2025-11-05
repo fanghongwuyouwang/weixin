@@ -279,21 +279,6 @@
             return ua.indexOf('micromessenger') !== -1;
         }
         
-        // 检测是否为iOS设备
-        function isIOS() {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        }
-        
-        // 检测是否为安卓设备
-        function isAndroid() {
-            return /Android/.test(navigator.userAgent);
-        }
-        
-        // 检测是否为苹果微信
-        function isIOSWeChat() {
-            return isWeChatBrowser() && isIOS();
-        }
-        
         // 检测是否为独立浏览器环境（非内嵌环境）
         function isStandaloneBrowser() {
             // 检查是否在微信、QQ、微博等APP内嵌浏览器中
@@ -436,7 +421,7 @@
             }
         }
         
-        // 6. 处理引导模式
+        // 6. 处理引导模式 - 修复版
         function handleRedirectMode(url) {
             // 更新引导页面的链接显示
             document.getElementById('copyText').textContent = url;
@@ -448,7 +433,7 @@
             loaderContainer.classList.add('hidden');
             guideContainer.classList.remove('hidden');
             
-            // 引导模式不自动跳转，保持显示引导页面
+            // 引导模式永远不自动跳转，固定显示引导页面
             return false;
         }
         
@@ -490,7 +475,7 @@
             const { url, method } = currentContent;
             
             if (method === 'redirect') {
-                // 引导模式
+                // 引导模式：永远显示引导页面，不跳转
                 return handleRedirectMode(url);
             } else {
                 // 内嵌模式
@@ -529,6 +514,7 @@
             const errorContainer = document.getElementById('errorContainer');
             const expiredContainer = document.getElementById('expiredContainer');
             const qrExpiredContainer = document.getElementById('qrExpiredContainer');
+            const guideContainer = document.getElementById('guideContainer');
             const [errorIcon, errorMessage] = [
                 document.getElementById('errorIcon'),
                 document.getElementById('errorMessage')
@@ -537,7 +523,7 @@
             
             // 重置所有状态
             loader.classList.remove('hidden');
-            [errorContainer, expiredContainer, qrExpiredContainer].forEach(el => el.classList.add('hidden'));
+            [errorContainer, expiredContainer, qrExpiredContainer, guideContainer].forEach(el => el.classList.add('hidden'));
             
             // 提取参数
             const { token, id } = extractParamsFromUrl();
